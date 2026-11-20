@@ -7,13 +7,23 @@ at the end.
 
 Live site: https://sunfizz-fofp0f.freebuff.site
 
-## The build
+## Source layout
 
-The whole site is one self-contained file, `index.html`: markup, CSS, and the
-Three.js r160 module are all inlined. Opening that single file is enough to run
-and deploy the site — there is no build step and no dependencies to install.
+The deployed site is one self-contained file, `index.html`: markup, CSS and the
+Three.js r160 module all inlined. That file is built from the parts in
+`site/partials`, which are concatenated in name order:
 
-## Run locally
+    site/partials/00-head.html   markup, CSS and the import map
+    site/partials/10-app.js      script, part 1 (setup, environment, labels, geometry)
+    site/partials/20-app.js      script, part 2 (backdrop shader, bottles, copy deck)
+    site/partials/30-app.js      script, part 3 (choreography, UI, events, boot)
+    site/partials/90-tail.html   closing script/body/html tags
+
+## Build
+
+    python3 build.py
+
+That writes `index.html`. Serve it with any static server, for example:
 
     python3 -m http.server 3000
 
@@ -21,8 +31,10 @@ Then open http://localhost:3000
 
 ## Hosting
 
-`worker.js` + `manifest.json` are an optional Cloudflare Worker wrapper that
-serves the static files. Any static host works; just publish `index.html`.
+`worker.js` + `manifest.json` are an optional Cloudflare Worker wrapper for the
+static output (`assetsDirectory` points at `./public`; copy the built
+`index.html` there before deploying). Any static host works — the deployed file
+is just `index.html`.
 
 ## Notes
 
