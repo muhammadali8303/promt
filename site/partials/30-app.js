@@ -166,7 +166,7 @@ function buildTextures(fronts) {
 
 let last = performance.now();
 let firstFrame = true;
-let prCur = Math.min(devicePixelRatio || 1, 1.5);
+let prCur = Math.min(devicePixelRatio || 1, 2);
 let prTarget = prCur;
 let avgMs = 16;
 let lastDrop = -1e9;
@@ -279,8 +279,10 @@ function frame(now) {
   const t = now / 1000;
 
   avgMs = avgMs * .9 + dtMs * .1;
-  if (avgMs > 19.5 && prCur > .7 && now - lastDrop > 400) {
-    prCur = Math.max(.7, prCur - .15);
+  /* never render below one device-independent pixel, so the canvas always
+     matches the screen 1:1 at minimum (true 1080p on a 1080p display) */
+  if (avgMs > 19.5 && prCur > 1 && now - lastDrop > 400) {
+    prCur = Math.max(1, prCur - .15);
     lastDrop = now;
     raiseAcc = 0;
     resize();
