@@ -1,0 +1,6 @@
+[build]
+  # The site is one file assembled from the parts in site/partials, joined in
+  # name order (identical result to `python3 build.py`). `cat` is available in
+  # every build environment, so this needs no runtime to install.
+  command = "cat site/partials/00-head.html site/partials/10-app.js site/partials/20-app.js site/partials/30-app.js site/partials/90-tail.html > index.html"
+  publish = "."
